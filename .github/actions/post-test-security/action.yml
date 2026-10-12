@@ -16,9 +16,10 @@ runs:
   using: composite
   steps:
     - name: Trivy - image scan
-      uses: aquasecurity/trivy-action@0.28.0
+      uses: aquasecurity/trivy-action@v0.35.0
       with:
         image-ref: ${{ inputs.image-ref }}
+        version: v0.69.3
         scanners: vuln
         severity: ${{ inputs.severity }}
         ignore-unfixed: true

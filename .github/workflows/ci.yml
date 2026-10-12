@@ -25,7 +25,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Local composite actions must be referenced AFTER checkout
       - name: Pre-test security
         uses: ./.github/actions/pre-test-security
 
