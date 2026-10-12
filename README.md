@@ -35,4 +35,4 @@ docker run -p 8000:8000 secure-pipeline-app
 - Local composite actions can only be used after `actions/checkout`.
 - Every `run` step in a composite action needs `shell: bash`.
 - Inputs let you tune severity or switch to report-only (`exit-code: "0"`).
-- For stronger supply-chain safety, pin third-party actions to commit SHAs.
+- trivy-action is pinned to `v0.35.0` and the Trivy binary to `v0.69.3` because of the March 2026 Trivy supply-chain compromise (GHSA-69fq-xp46-6x23). Older tags like `0.28.0` were deleted. Prefer pinning to a full commit SHA.
