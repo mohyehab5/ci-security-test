@@ -17,6 +17,9 @@ inputs:
   trufflehog-only-verified:
     description: Only fail on secrets TruffleHog can verify as live
     default: "true"
+  sonar-token:
+    description: SonarQube authentication token
+    required: true
 
 runs:
   using: composite
@@ -53,3 +56,8 @@ runs:
           -v "${{ github.workspace }}:/repo" \
           "trufflesecurity/trufflehog:${{ inputs.trufflehog-version }}" \
           git file:///repo $VERIFIED --fail --no-update
+    
+    - name: SonarQube Scan
+      uses: SonarSource/sonarqube-scan-action@v6
+      env:
+        SONAR_TOKEN: ${{ secrets.sontoken }}
