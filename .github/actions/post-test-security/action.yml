@@ -1,0 +1,26 @@
+name: Post-test security
+description: Trivy vulnerability scan of the built Docker image.
+
+inputs:
+  image-ref:
+    description: Image to scan (e.g. myapp:sha)
+    required: true
+  severity:
+    description: Severities that fail the scan
+    default: "CRITICAL,HIGH"
+  exit-code:
+    description: Exit code when vulnerabilities are found (1 = fail, 0 = report only)
+    default: "1"
+
+runs:
+  using: composite
+  steps:
+    - name: Trivy - image scan
+      uses: aquasecurity/trivy-action@0.28.0
+      with:
+        image-ref: ${{ inputs.image-ref }}
+        scanners: vuln
+        severity: ${{ inputs.severity }}
+        ignore-unfixed: true
+        exit-code: ${{ inputs.exit-code }}
+        format: table

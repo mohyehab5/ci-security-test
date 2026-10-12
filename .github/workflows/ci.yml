@@ -1,0 +1,51 @@
+name: Secure CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  IMAGE_NAME: secure-pipeline-app
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout (full history for secret scanners)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Local composite actions must be referenced AFTER checkout
+      - name: Pre-test security
+        uses: ./.github/actions/pre-test-security
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Run tests
+        run: pytest -v
+
+      - name: Build Docker image
+        run: docker build -t "${IMAGE_NAME}:${{ github.sha }}" .
+
+      - name: Post-test security
+        uses: ./.github/actions/post-test-security
+        with:
+          image-ref: ${{ env.IMAGE_NAME }}:${{ github.sha }}

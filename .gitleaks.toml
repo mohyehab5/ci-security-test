@@ -1,0 +1,10 @@
+title = "Project gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Paths that never contain real secrets"
+paths = [
+  '''requirements.*\.txt''',
+]
