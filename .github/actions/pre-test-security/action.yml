@@ -60,4 +60,4 @@ runs:
     - name: SonarQube Scan
       uses: SonarSource/sonarqube-scan-action@v6
       env:
-        SONAR_TOKEN: ${{ secrets.SONTOKEN}}
+        SONAR_TOKEN: ${{ env.SONTOKEN}}

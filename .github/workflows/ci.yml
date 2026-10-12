@@ -27,6 +27,8 @@ jobs:
 
       - name: Pre-test security
         uses: ./.github/actions/pre-test-security
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
